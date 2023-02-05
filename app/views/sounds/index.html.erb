@@ -1,1 +1,11 @@
 <h1>Sounds#Index</h1>
+<ul>
+  <% @sounds.each do |sound| %>
+    <li>
+      <p><%= sound.title%></p>
+        <% if sound.audio.audio? %>
+          <%= audio_tag url_for(sound.audio), class:"audio", controls: "" %>
+        <% end %>
+    </li>
+  <% end %>
+</ul>
