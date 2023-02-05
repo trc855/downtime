@@ -10,6 +10,7 @@ class SoundsController < ApplicationController
   def create
     @sound = Sound.new(sound_params)
     @sound.user = current_user
+    @sound.audio.attach(params[:sound][:audio])
 
     if @sound.save
       redirect_to sounds_path, notice: "Sound added"
@@ -29,6 +30,6 @@ class SoundsController < ApplicationController
   private
 
   def sound_params
-    params.require(:sound).permit(:title, :lat, :long)
+    params.require(:sound).permit(:title, :lat, :long, :audio)
   end
 end
