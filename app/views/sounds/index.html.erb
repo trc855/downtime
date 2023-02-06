@@ -1,11 +1,7 @@
-<h1>Sounds#Index</h1>
-<ul>
-  <% @sounds.each do |sound| %>
-    <li>
-      <p><%= sound.title%></p>
-        <% if sound.audio.audio? %>
-          <%= audio_tag url_for(sound.audio), class:"audio", controls: "" %>
-        <% end %>
-    </li>
-  <% end %>
-</ul>
+<h1>~  d o w n t i m e  ~</h1>
+<h3>ambient sound</h3>
+
+<div style="width: 100%; height: 600px;"
+data-controller="map"
+data-map-markers-value="<%= @markers.to_json %>"
+data-map-api-key-value="<%= ENV['MAPBOX_API_KEY'] %>"></div>

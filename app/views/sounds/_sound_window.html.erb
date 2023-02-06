@@ -1,0 +1,4 @@
+<p><%= sound.title%></p>
+<% if sound.audio.audio? %>
+  <%= audio_tag url_for(sound.audio), class:"audio", controls: true %>
+<% end %>

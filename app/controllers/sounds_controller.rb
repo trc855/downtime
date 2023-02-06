@@ -1,6 +1,14 @@
 class SoundsController < ApplicationController
   def index
     @sounds = Sound.all
+
+    @markers = @sounds.geocoded.map do |sound|
+      {
+        lat: sound.latitude,
+        lng: sound.longitude,
+        sound_window_html: render_to_string(partial: "sound_window", locals: { sound: sound })
+      }
+    end
   end
 
   def new
@@ -30,6 +38,6 @@ class SoundsController < ApplicationController
   private
 
   def sound_params
-    params.require(:sound).permit(:title, :lat, :long, :audio)
+    params.require(:sound).permit(:title, :location, :audio)
   end
 end

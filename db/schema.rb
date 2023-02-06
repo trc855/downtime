@@ -44,8 +44,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_05_034532) do
 
   create_table "sounds", force: :cascade do |t|
     t.string "title"
-    t.decimal "lat"
-    t.decimal "long"
+    t.string "location"
+    t.decimal "latitude"
+    t.decimal "longitude"
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
