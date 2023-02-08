@@ -1,4 +1,6 @@
 class SoundsController < ApplicationController
+  before_action :set_sound, only: [:destroy]
+
   def index
     @sounds = Sound.all
 
@@ -28,7 +30,6 @@ class SoundsController < ApplicationController
   end
 
   def destroy
-    @sound = Sound.find(params[:id])
     if @sound.destroy
       redirect_to sounds_path, notice: "Sound deleted"
     else
@@ -40,5 +41,9 @@ class SoundsController < ApplicationController
 
   def sound_params
     params.require(:sound).permit(:title, :location, :audio)
+  end
+
+  def set_sound
+    @sound = Sound.find(params[:id])
   end
 end
