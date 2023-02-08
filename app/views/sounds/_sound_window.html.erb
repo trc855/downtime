@@ -2,3 +2,6 @@
 <% if sound.audio.audio? %>
   <%= audio_tag url_for(sound.audio), class:"audio", controls: true %>
 <% end %>
+<% if current_user == sound.user %>
+  <%= link_to "delete", sound_path(sound), data: { "turbo-method": :delete } %>
+<% end %>

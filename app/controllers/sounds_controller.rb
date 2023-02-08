@@ -28,6 +28,7 @@ class SoundsController < ApplicationController
   end
 
   def destroy
+    @sound = Sound.find(params[:id])
     if @sound.destroy
       redirect_to sounds_path, notice: "Sound deleted"
     else
