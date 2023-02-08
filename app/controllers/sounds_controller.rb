@@ -1,4 +1,6 @@
 class SoundsController < ApplicationController
+  before_action :set_sound, only: [:destroy]
+
   def index
     @sounds = Sound.all
 
@@ -39,5 +41,9 @@ class SoundsController < ApplicationController
 
   def sound_params
     params.require(:sound).permit(:title, :location, :audio)
+  end
+
+  def set_sound
+    @sound = Sound.find(params[:id])
   end
 end
