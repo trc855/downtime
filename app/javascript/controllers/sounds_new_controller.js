@@ -4,7 +4,6 @@ import { DirectUpload } from "@rails/activestorage";
 export default class extends Controller {
 
   connect() {
-    console.log("Hello from sounds_new_controller Stimulus controller")
     this.audio()
   }
 
@@ -48,7 +47,7 @@ export default class extends Controller {
           uploadFile(file)
           fileField.files = container.files
           // below is optional
-          fileField.dispatchEvent(new Event("change"))
+          // fileField.dispatchEvent(new Event("change"))
         }
 
         mediaRecorder.ondataavailable = function (event) {
@@ -69,8 +68,8 @@ export default class extends Controller {
 
 const uploadFile = (file) => {
   const input = document.getElementById('sound_audio')
-  console.log(input)
   const url = input.dataset.directUploadUrl
+
   const upload = new DirectUpload(file, url)
 
   upload.create((error, blob) => {
@@ -84,6 +83,5 @@ const uploadFile = (file) => {
       let soundForm = document.getElementById("sound-form")
       soundForm.appendChild(hiddenField)
     }
-
   })
 }
