@@ -1,9 +1,28 @@
 <div class="container" data-controller="sounds-new">
-  <%= simple_form_for(sound) do |f| %>
+  <!--
+  <%= simple_form_for(sound, id: "sound-form") do |f| %>
     <%= f.input :title %>
     <%= f.input :location %>
-    <%= content_tag :i, nil, id: 'audio-record-button', class: 'bi bi-mic microphone-icon' %>
-    <%= f.file_field :audio %>
+    <%# <%= content_tag :i, nil, id: 'audio-record-button', class: 'bi bi-mic microphone-icon' %>
+    <div class="btn" id='audio-record-button'>Record</div>
+    <div class="audio_upload">
+      <%# double check direct upload true syntax for simple form %>
+      <%= f.file_field :audio, data: { direct_upload: true } %>
+    </div>
+    <%= f.submit %>
+  <% end %>
+   -->
+
+  <%= form_with model: sound do |f| %>
+    <%= f.label :title %>
+    <%= f.text_field :title %>
+    <%= f.label :location %>
+    <%= f.text_field :location %>
+    <div class="btn" id='audio-record-button'>Record</div>
+    <div class="audio_upload">
+      <%= f.label :audio %>
+      <%= f.file_field :audio, direct_upload: true %>
+    </div>
     <%= f.submit %>
   <% end %>
 </div>
