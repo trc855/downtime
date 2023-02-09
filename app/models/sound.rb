@@ -3,8 +3,7 @@ class Sound < ApplicationRecord
 
   has_one_attached :audio, dependent: :destroy
 
-  # commenting this out temporarily for testing
-  # validates :audio, presence: true
+  validates :audio, presence: true
 
   validates :location, presence: true
 
