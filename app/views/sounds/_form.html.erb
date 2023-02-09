@@ -1,6 +1,14 @@
-<%= simple_form_for sound do |f| %>
-  <%= f.input :title %>
-  <%= f.input :location %>
-  <%= f.file_field :audio %>
-  <%= f.submit %>
-<% end %>
+<div class="container" data-controller="sounds-new">
+  <%= form_with model: sound do |f| %>
+    <%= f.label :title %>
+    <%= f.text_field :title %>
+    <%= f.label :location %>
+    <%= f.text_field :location %>
+    <div class="btn" id='audio-record-button'>Record</div>
+    <div class="audio_upload">
+      <%= f.label :audio %>
+      <%= f.file_field :audio, direct_upload: true %>
+    </div>
+    <%= f.submit %>
+  <% end %>
+</div>

@@ -4,6 +4,7 @@ class Sound < ApplicationRecord
   has_one_attached :audio, dependent: :destroy
 
   validates :audio, presence: true
+
   validates :location, presence: true
 
   geocoded_by :location
