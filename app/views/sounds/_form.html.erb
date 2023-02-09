@@ -1,6 +1,9 @@
-<%= simple_form_for sound do |f| %>
-  <%= f.input :title %>
-  <%= f.input :location %>
-  <%= f.file_field :audio %>
-  <%= f.submit %>
-<% end %>
+<div class="container" data-controller="sounds-new">
+  <%= simple_form_for(sound) do |f| %>
+    <%= f.input :title %>
+    <%= f.input :location %>
+    <%= content_tag :i, nil, id: 'audio-record-button', class: 'bi bi-mic microphone-icon' %>
+    <%= f.file_field :audio %>
+    <%= f.submit %>
+  <% end %>
+</div>
