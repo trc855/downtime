@@ -7,7 +7,14 @@ class PlaylistSoundsController < ApplicationController
   end
 
   def destroy
-
+    @playlist_sound = PlaylistSound.find(params[:id])
+    sound = @playlist_sound.sound.title
+    playlist = @playlist_sound.playlist
+    if @playlist_sound.destroy
+      redirect_to playlist_path(playlist), notice: "#{sound} removed from #{playlist.title}"
+    else
+      redirect_to playlist_path(playlist), notice: "#{sound} could not be removed from #{playlist.title}"
+    end
   end
 
   private
