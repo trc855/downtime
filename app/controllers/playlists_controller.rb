@@ -6,6 +6,7 @@ class PlaylistsController < ApplicationController
   end
 
   def show
+    @sounds = @playlist.sounds
   end
 
   def new
