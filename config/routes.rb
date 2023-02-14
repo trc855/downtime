@@ -7,4 +7,5 @@ Rails.application.routes.draw do
   # root "articles#index"
   resources :sounds, only: %w[index new create destroy]
   resources :playlists, only: %w[index show new create destroy]
+  resources :playlist_sounds, only: %w[create destroy]
 end
