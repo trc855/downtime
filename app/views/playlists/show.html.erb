@@ -13,3 +13,6 @@
     </li>
   <% end %>
 </ul>
+
+
+<%= link_to "delete playlist", playlist_path(@playlist), data: { "turbo-method": :delete } %>
