@@ -2,6 +2,13 @@
 <% if sound.audio.audio? %>
   <%= audio_tag url_for(sound.audio), class:"audio", controls: true %>
 <% end %>
+<%= simple_form_for @playlist_sound do |f| %>
+  <%= f.association :playlist, collection: @playlists %>
+  <div class="d-none">
+    <%= f.association :sound, selected: sound.id %>
+  </div>
+  <%= f.submit "Add to playlist" %>
+<% end %>
 <% if current_user == sound.user %>
   <%= link_to "delete", sound_path(sound), data: { "turbo-method": :delete } %>
 <% end %>
