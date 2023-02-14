@@ -1,9 +1,9 @@
-<h1>Playlists#index</h1>
-<p>Find me in app/views/playlists/index.html.erb</p>
+<h1>My playlists</h1>
+
 <ul>
-<% @playlists.each do |playlist| %>
-  <li>
-    <%= link_to playlist.title, playlist_path(playlist) %>
-  </li>
-<% end %>
+  <% @playlists.each do |playlist| %>
+    <li>
+      <%= link_to playlist.title, playlist_path(playlist) %>
+    </li>
+  <% end %>
 </ul>
