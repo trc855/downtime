@@ -1,5 +1,6 @@
 class Sound < ApplicationRecord
   belongs_to :user
+  has_many :playlist_sounds
 
   has_one_attached :audio, dependent: :destroy
 
