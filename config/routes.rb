@@ -6,4 +6,5 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "articles#index"
   resources :sounds, only: %w[index new create destroy]
+  resources :playlists, only: %w[index show new create destroy]
 end

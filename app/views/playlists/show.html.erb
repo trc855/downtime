@@ -1,0 +1,18 @@
+<h1><%= @playlist.title %></h1>
+
+<ul>
+  <% @sounds.each do |sound| %>
+    <li>
+      <%= sound.title %>
+      <% if sound.audio.audio? %>
+        <%= audio_tag url_for(sound.audio), class:"audio", controls: true %>
+      <% end %>
+      <% if current_user == sound.user %>
+        <%= link_to "delete", sound_path(sound), data: { "turbo-method": :delete } %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>
+
+
+<%= link_to "delete playlist", playlist_path(@playlist), data: { "turbo-method": :delete } %>
