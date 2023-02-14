@@ -3,6 +3,8 @@ class SoundsController < ApplicationController
 
   def index
     @sounds = Sound.all
+    @playlists = current_user.playlists
+    @playlist_sound = PlaylistSound.new
 
     @markers = @sounds.geocoded.map do |sound|
       {
