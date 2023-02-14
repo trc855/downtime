@@ -1,2 +1,7 @@
-<h1>Playlists#new</h1>
-<p>Find me in app/views/playlists/new.html.erb</p>
+<h1>My Playlists</h1>
+
+<%= form_with model: @playlist do |f| %>
+  <%= f.label :title %>
+  <%= f.text_field :title %>
+  <%= f.submit %>
+<% end %>
