@@ -3,35 +3,44 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = ["audiotag", "playbutton"]
 
+
+
   connect() {
     console.log("Hello from playlist controller!")
 
     // console.log(this.audiotagTarget.children[0])
+
+    this.audioContext = null
+    this.track = null
+    this.audiotagTarget.children[0].addEventListener("canplay", this.createAudioContext.bind(this))
+  }
+
+  createAudioContext() {
+    if(!this.audioContext){
+      this.AudioContext = window.AudioContext || window.webkitAudioContext;
+      this.audioContext = new AudioContext();
+
+      this.audioElement = this.audiotagTarget.children[0];
+      this.track = this.audioContext.createMediaElementSource(this.audioElement);
+      this.track.connect(this.audioContext.destination);
+    }
   }
 
   play() {
     console.log("play")
 
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    const audioContext = new AudioContext();
-
-    const audioElement = this.audiotagTarget.children[0]
-    const track = audioContext.createMediaElementSource(audioElement);
-
-    track.connect(audioContext.destination);
-
-    if (audioContext.state === "suspended") {
-      audioContext.resume();
+    if (this.audioContext.state === "suspended") {
+      this.audioContext.resume();
     }
 
     const playButton = this.playbuttonTarget
 
     // Play or pause track depending on state
     if (playButton.dataset.playing === "false") {
-      audioElement.play();
+      this.audioElement.play();
       playButton.dataset.playing = "true";
     } else if (playButton.dataset.playing === "true") {
-      audioElement.pause();
+      this.audioElement.pause();
       playButton.dataset.playing = "false";
     }
 
