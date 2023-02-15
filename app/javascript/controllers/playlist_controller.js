@@ -6,10 +6,6 @@ export default class extends Controller {
 
 
   connect() {
-    console.log("Hello from playlist controller!")
-
-    // console.log(this.audiotagTarget.children[0])
-
     this.audioContext = null
     this.track = null
     this.audiotagTarget.children[0].addEventListener("canplay", this.createAudioContext.bind(this))
@@ -27,8 +23,6 @@ export default class extends Controller {
   }
 
   play() {
-    console.log("play")
-
     if (this.audioContext.state === "suspended") {
       this.audioContext.resume();
     }
