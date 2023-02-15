@@ -1,19 +1,34 @@
-<h1><%= @playlist.title %></h1>
+<div class="container" data-controller="playlist">
+  <h1><%= @playlist.title %></h1>
 
-<ul>
-  <% @playlist_sounds.each do |playlist_sound| %>
-    <li>
+  <ul class='playlist-list'>
+    <% @playlist_sounds.each do |playlist_sound| %>
       <% sound = playlist_sound.sound %>
-      <%= sound.title %>
-      <% if sound.audio.audio? %>
-        <%= audio_tag url_for(sound.audio), class:"audio", controls: true %>
-      <% end %>
-      <% if current_user == sound.user %>
-        <%= link_to "remove", playlist_sound_path(playlist_sound), data: { "turbo-method": :delete } %>
-      <% end %>
-    </li>
-  <% end %>
-</ul>
+      <li class='playlist-item'>
+        <%= sound.title %>
+        <% if sound.audio.audio? %>
+        <div class="audio-tag" data-playlist-target="audiotag">
+          <%= audio_tag url_for(sound.audio),
+                    class:"audio",
+                    controls: true %>
+        </div>
+        <% end %>
+        <% if current_user == sound.user %>
+          <%= link_to "remove", playlist_sound_path(playlist_sound), data: { "turbo-method": :delete } %>
+        <% end %>
+        <%# SOUND CONTROLS %>
+        <div class="controls">
+          <%# <div class="btn btn-primary">
+            <p>Play</p>
+          </div> %>
+          <button data-playing="false" role="switch" aria-checked="false" data-action="click->playlist#play" data-playlist-target="playbutton">
+            <span>Play/Pause</span>
+          </button>
+        </div>
+      </li>
+    <% end %>
+  </ul>
 
 
-<%= link_to "delete playlist", playlist_path(@playlist), data: { "turbo-method": :delete } %>
+  <%= link_to "delete playlist", playlist_path(@playlist), data: { "turbo-method": :delete } %>
+</div>
