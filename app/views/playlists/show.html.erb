@@ -14,7 +14,7 @@
         <div class="audio-tag" data-playlist-target="audiotag">
           <%= audio_tag url_for(sound.audio),
                     class:"audio",
-                    controls: true %>
+                    controls: false %>
         </div>
         <% end %>
         <% if current_user == sound.user %>
@@ -22,9 +22,6 @@
         <% end %>
         <%# SOUND CONTROLS %>
         <div class="controls">
-          <%# <div class="btn btn-primary">
-            <p>Play</p>
-          </div> %>
           <button data-playing="false" role="switch" aria-checked="false" data-action="click->playlist#play" data-playlist-target="playbutton">
             <span>Play/Pause</span>
           </button>
