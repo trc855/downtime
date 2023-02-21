@@ -1,7 +1,7 @@
 <div class="container" data-controller="sounds-new">
   <%= form_with model: sound do |f| %>
     <%= f.label :title, class: "form-label" %>
-    <%= f.text_field :title, class: "form-control" %>
+    <%= f.text_field :title, class: "form-control", placeholder: "Name your sound" %>
     <div class="location-input" data-controller="location">
 
       <%= f.label :location, class: "form-label" %>
@@ -20,7 +20,7 @@
         </label>
       </div>
 
-      <%= f.text_field :location, class: "form-control d-none", data: { target: "location.input"}, prompt: "Enter an address..." %>
+      <%= f.text_field :location, class: "form-control d-none", data: { target: "location.input"}, placeholder: "Enter an address..." %>
     </div>
     <%= f.label :audio, class: "form-label" %>
     <div class="audio_upload input-group mb-3">
