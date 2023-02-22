@@ -1,0 +1,12 @@
+<h1>My Sounds</h1>
+<ul>
+  <% @sounds.each do |sound| %>
+    <li>
+      <p><%= sound.title%></p>
+      <% if sound.audio.audio? %>
+        <%= audio_tag url_for(sound.audio), class:"audio", controls: true %>
+      <% end %>
+      <%= link_to "Delete this sound", sound_path(sound), data: { "turbo-method": :delete } %>
+    </li>
+  <% end %>
+</ul>
