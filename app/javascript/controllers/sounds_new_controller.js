@@ -25,12 +25,10 @@ export default class extends Controller {
           event.preventDefault
           if (recording) {
             mediaRecorder.stop()
-            record.style.color = "black"
-            record.innerText = "Record"
+            record.innerHTML = <i class='fa-solid fa-microphone'></i>
           } else {
             mediaRecorder.start()
-            record.style.color = "white"
-            record.innerText = "Recording"
+            // record.innerText = "Recording"
           }
           recording = !recording
         }

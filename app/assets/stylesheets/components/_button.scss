@@ -1,95 +1,74 @@
-// #audio-record-button,
-// #audio-record-button *,
-// #audio-record-button :after,
-// #audio-record-button :before,
-// #audio-record-button:after,
-// #audio-record-button:before {
-//   border: 0 solid;
-//   box-sizing: border-box;
-// }
-// #audio-record-button {
-//   -webkit-tap-highlight-color: transparent;
-//   -webkit-appearance: button;
-//   background-color: #000;
-//   background-image: none;
-//   color: #fff;
-//   cursor: pointer;
-//   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-//     Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif,
-//     Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
-//   font-size: 100%;
-//   line-height: 1.5;
-//   margin: 0;
-//   -webkit-mask-image: -webkit-radial-gradient(#000, #fff);
-//   padding: 0;
-//   text-transform: uppercase;
-// }
-// #audio-record-button:disabled {
-//   cursor: default;
-// }
-// #audio-record-button:-moz-focusring {
-//   outline: auto;
-// }
-// #audio-record-button svg {
-//   display: block;
-//   vertical-align: middle;
-// }
-// #audio-record-button [hidden] {
-//   display: none;
-// }
-// #audio-record-button {
-//   border-radius: 99rem;
-//   border-width: 2px;
-//   overflow: hidden;
-//   padding: 0.8rem 0.8rem;
-//   position: relative;
-// }
-// #audio-record-button span {
-//   mix-blend-mode: difference;
-// }
-// #audio-record-button:before {
-//   -webkit-animation: bg-scroll 3s linear infinite;
-//   animation: bg-scroll 3s linear infinite;
-//   -webkit-animation-play-state: paused;
-//   animation-play-state: paused;
-//   background: repeating-linear-gradient(
-//     45deg,
-//     hsla(0, 0%, 100%, 0.2),
-//     hsla(0, 0%, 100%, 0.2) 0.7%,
-//     transparent 0,
-//     transparent 4%
-//   );
-//   content: "";
-//   display: block;
-//   height: 300%;
-//   left: -100%;
-//   opacity: 0;
-//   position: absolute;
-//   top: 0;
-//   transition: opacity 0.3s, background-color 0.2s;
-//   width: 300%;
-// }
-// #audio-record-button:hover:before {
-//   -webkit-animation-play-state: running;
-//   animation-play-state: running;
-//   opacity: 1;
-// }
-// #audio-record-button:active:before {
-//   background-color: #fff;
-// }
-// @-webkit-keyframes bg-scroll {
-//   0% {
-//     transform: translateX(0);
-//   }
-//   to {
-//     transform: translateX(33%);
-//   }
-// }
-// @keyframes bg-scroll {
-//   0% {
-//     transform: translateX(0);
-//   }
-//   to {
-//     transform: translateX(33%);
-//   }
-// }
+@keyframes quiet {
+  25%{
+    transform: scaleY(.6);
+  }
+  50%{
+    transform: scaleY(.4);
+  }
+  75%{
+    transform: scaleY(.8);
+  }
+}
+
+@keyframes normal {
+  25%{
+    transform: scaleY(1);
+  }
+  50%{
+    transform: scaleY(.4);
+  }
+  75%{
+    transform: scaleY(.6);
+  }
+}
+@keyframes loud {
+  25%{
+    transform: scaleY(1);
+  }
+  50%{
+    transform: scaleY(.4);
+  }
+  75%{
+    transform: scaleY(1.2);
+  }
+}
+
+.boxContainer{
+  display: flex;
+  justify-content: space-between;
+  height: 24px;
+  --boxSize: 2px;
+  --gutter: 1px;
+  width: calc((var(--boxSize) + var(--gutter)) * 5);
+}
+
+.box{
+  transform: scaleY(.4);
+  height: 100%;
+  width: var(--boxSize);
+  background: black;
+  animation-duration: 1.2s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  border-radius: 8px;
+}
+
+.box1{
+  animation-name: quiet;
+}
+
+.box2{
+  animation-name: normal;
+}
+
+.box3{
+  animation-name: quiet;
+}
+
+.box4{
+  animation-name: loud;
+}
+
+.box5{
+  animation-name: quiet;
+}

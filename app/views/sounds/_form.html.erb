@@ -24,7 +24,16 @@
     </div>
     <%= f.label :audio, class: "form-label" %>
     <div class="audio_upload input-group mb-3">
-      <div class="btn btn-dark rounded-5" id='audio-record-button'><span><i class="fa-solid fa-microphone"></i></span></div>
+      <div class="btn btn-dark rounded-5" id='audio-record-button'>
+        <i class="fa-solid fa-microphone" id="audio-record-inactive"></i>
+        <div class="boxContainer d-none" id="audio-record-active">
+          <div class="box box1"></div>
+          <div class="box box2"></div>
+          <div class="box box3"></div>
+          <div class="box box4"></div>
+          <div class="box box5"></div>
+        </div>
+      </div>
       <%= f.file_field :audio, direct_upload: true, class: "form-control" %>
     </div>
     <%= f.submit class: "btn btn-primary" %>
