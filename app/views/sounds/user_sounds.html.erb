@@ -6,7 +6,6 @@
       <% if sound.audio.audio? %>
         <%= audio_tag url_for(sound.audio), class:"audio", controls: true %>
       <% end %>
-      <%# this delete method should not redirect elsewhere %>
       <%= link_to "Delete this sound", sound_path(sound), data: { "turbo-method": :delete } %>
     </li>
   <% end %>
