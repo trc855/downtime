@@ -1,7 +1,7 @@
 
 
 <div class="container"
- data-controller="playlist"
+ <%# data-controller="playlist" %>
  >
   <h1><%= @playlist.title %></h1>
 
@@ -14,18 +14,80 @@
         <div class="audio-tag" data-playlist-target="audiotag">
           <%= audio_tag url_for(sound.audio),
                     class:"audio",
-                    controls: false %>
+                    id:"audio-player",
+                    controls: true %>
         </div>
+
         <% end %>
         <% if current_user == sound.user %>
           <%= link_to "remove", playlist_sound_path(playlist_sound), data: { "turbo-method": :delete } %>
         <% end %>
         <%# SOUND CONTROLS %>
         <div class="controls">
+          <button id="loop-button">Loop</button>
+          <button id="delay-button">Add Delay</button>
+          <button id="distortion-button">Distortion</button>
+          <!--
           <button data-playing="false" role="switch" aria-checked="false" data-action="click->playlist#play" data-playlist-target="playbutton">
             <span>Play/Pause</span>
           </button>
+          -->
         </div>
+        <script>
+          const audioPlayer = document.getElementById('audio-player');
+
+          const loopButton = document.getElementById('loop-button');
+          const distortionButton = document.getElementById('distortion-button');
+
+          loopButton.addEventListener('click', () => {
+            audioPlayer.loop = !audioPlayer.loop;
+            loopButton.classList.toggle('active', audioPlayer.loop);
+          });
+
+          const audioContext = new AudioContext();
+          // const audioPlayer = document.getElementById('audio-player');
+          const delayButton = document.getElementById('delay-button');
+
+          delayButton.addEventListener('click', () => {
+            audioContext.resume().then(() => {
+              const source = audioContext.createMediaElementSource(audioPlayer);
+
+              const delayNode = audioContext.createDelay();
+              delayNode.delayTime.value = 0.5; // set delay time to 0.5 seconds
+
+              source.connect(delayNode);
+              delayNode.connect(audioContext.destination);
+
+              audioPlayer.play();
+
+              delayButton.disabled = true;
+              audioPlayer.addEventListener('ended', () => {
+                delayNode.disconnect();
+                delayButton.disabled = false;
+              });
+            });
+          });
+
+          const distortionCurve = new Float32Array([0, 0.5, 0.7, 0.8, 0.9, 1]);
+
+          // Add an event listener to the distortion button
+          distortionButton.addEventListener('click', () => {
+            // Create a media element source node for the audio player
+            audioContext.resume().then(() => {
+              const source = audioContext.createMediaElementSource(audioPlayer);
+
+              // Create a wave shaper node for the distortion effect
+              const waveShaperNode = audioContext.createWaveShaper();
+              waveShaperNode.curve = distortionCurve;
+
+              // Connect the nodes to the audio context
+              source.connect(waveShaperNode).connect(audioContext.destination);
+
+              // Play the audio
+              audioPlayer.play();
+            });
+          });
+        </script>
       </li>
     <% end %>
   </ul>
