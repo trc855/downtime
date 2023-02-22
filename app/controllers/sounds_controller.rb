@@ -41,6 +41,10 @@ class SoundsController < ApplicationController
     end
   end
 
+  def user_sounds
+    @sounds = current_user.sounds
+  end
+
   private
 
   def sound_params
