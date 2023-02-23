@@ -30,10 +30,10 @@
         <%# SOUND CONTROLS %>
         <div class="controls">
           <button id="play-button" data-playing="false">Play/Pause</button>
-          <button id="stop-button">Stop</button>
+          <button id="reset-button">Reset</button>
           <button id="loop-button">Loop</button>
-          <button id="delay-button">Add Delay</button>
-          <button id="distortion-button">Distortion</button>
+          <button id="delay-button" data-active="false">Add Delay</button>
+          <button id="distortion-button">Add Distortion</button>
           <!--
           <button data-playing="false" role="switch" aria-checked="false" data-action="click->playlist#play" data-playlist-target="playbutton">
             <span>Play/Pause</span>
@@ -42,12 +42,11 @@
         </div>
         <script>
           const audioElement = document.getElementById('audio-player');
-          const audioContext = new AudioContext();
+          let audioContext = new AudioContext();
 
-          const track = audioContext.createMediaElementSource(audioElement);
+          let track = audioContext.createMediaElementSource(audioElement);
 
           const playButton = document.getElementById('play-button');
-
           // play pause audio
           playButton.addEventListener('click', function() {
             track.connect(audioContext.destination);
@@ -76,10 +75,11 @@
             playButton.setAttribute( "aria-checked", "false" );
           }, false);
 
-          // const stopButton = document.getElementById('stop-button');
-          // playButton.addEventListener('click', () => {
-          //   audioElement.stop();
-          // });
+          // Reset mix
+          const resetButton = document.getElementById('reset-button')
+          resetButton.addEventListener('click', () => {
+            // Implement total refresh here
+          });
 
           // Loop
           const loopButton = document.getElementById('loop-button');
@@ -93,21 +93,13 @@
           const delayButton = document.getElementById('delay-button');
           delayButton.addEventListener('click', () => {
             audioContext.resume().then(() => {
-              // const source = audioContext.createMediaElementSource(audioElement);
 
               const delayNode = audioContext.createDelay();
               delayNode.delayTime.value = 0.1; // set delay time to 0.1 seconds
 
-              // source.connect(delayNode);
-              track.connect(delayNode).connect(audioContext.destination);
-
-              // audioElement.play();
-
-              // delayButton.disabled = true;
-              // audioElement.addEventListener('ended', () => {
-              //   delayNode.disconnect();
-              //   delayButton.disabled = false;
-              // });
+              track.connect(delayNode)
+              delayNode.connect(audioContext.destination);
+              this.dataset.active = "true";
             });
           });
 
@@ -115,19 +107,13 @@
           const distortionButton = document.getElementById('distortion-button');
           const distortionCurve = new Float32Array([0, 0.5, 1]);
           distortionButton.addEventListener('click', () => {
-            // Create a media element source node for the audio player
             audioContext.resume().then(() => {
-              // const source = audioContext.createMediaElementSource(audioElement);
-
               // Create a wave shaper node for the distortion effect
               const waveShaperNode = audioContext.createWaveShaper();
+
               waveShaperNode.curve = distortionCurve;
-
-              // Connect the nodes to the audio context
+              // Connect waveshaper node twice for gritty distortion
               track.connect(waveShaperNode).connect(waveShaperNode).connect(audioContext.destination);
-
-              // Play the audio
-              // audioElement.play();
             });
           });
         </script>
