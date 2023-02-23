@@ -6,16 +6,21 @@
   <h1><%= @playlist.title %></h1>
 
   <ul class='playlist-list'>
-    <% @playlist_sounds.each do |playlist_sound| %>
+    <%
+      # @playlist_sounds.each do |playlist_sound|
+      playlist_sound = @playlist_sounds.first
+      %>
       <% sound = playlist_sound.sound %>
       <li class='playlist-item'>
         <%= sound.title %>
         <% if sound.audio.audio? %>
         <div class="audio-tag" data-playlist-target="audiotag">
+          <%# <!-- %>
           <%= audio_tag url_for(sound.audio),
                     class:"audio",
                     id:"audio-player",
-                    controls: true %>
+                    controls: false %>
+                    <%# --> %>
         </div>
 
         <% end %>
@@ -24,6 +29,8 @@
         <% end %>
         <%# SOUND CONTROLS %>
         <div class="controls">
+          <button id="play-button" data-playing="false">Play/Pause</button>
+          <button id="stop-button">Stop</button>
           <button id="loop-button">Loop</button>
           <button id="delay-button">Add Delay</button>
           <button id="distortion-button">Distortion</button>
@@ -34,62 +41,100 @@
           -->
         </div>
         <script>
-          const audioPlayer = document.getElementById('audio-player');
+          const audioElement = document.getElementById('audio-player');
+          const audioContext = new AudioContext();
 
+          const track = audioContext.createMediaElementSource(audioElement);
+
+          const playButton = document.getElementById('play-button');
+
+          // play pause audio
+          playButton.addEventListener('click', function() {
+            track.connect(audioContext.destination);
+            // check if context is in suspended state (autoplay policy)
+            if (audioContext.state === 'suspended') {
+              audioContext.resume();
+            }
+
+            if (this.dataset.playing === 'false') {
+              audioElement.play();
+              this.dataset.playing = 'true';
+            // if track is playing pause it
+            } else if (this.dataset.playing === 'true') {
+              audioElement.pause();
+              this.dataset.playing = 'false';
+            }
+
+            let state = this.getAttribute('aria-checked') === "true" ? true : false;
+            this.setAttribute( 'aria-checked', state ? "false" : "true" );
+
+          }, false);
+
+          // if track ends
+          audioElement.addEventListener('ended', () => {
+            playButton.dataset.playing = 'false';
+            playButton.setAttribute( "aria-checked", "false" );
+          }, false);
+
+          // const stopButton = document.getElementById('stop-button');
+          // playButton.addEventListener('click', () => {
+          //   audioElement.stop();
+          // });
+
+          // Loop
           const loopButton = document.getElementById('loop-button');
-          const distortionButton = document.getElementById('distortion-button');
-
           loopButton.addEventListener('click', () => {
-            audioPlayer.loop = !audioPlayer.loop;
-            loopButton.classList.toggle('active', audioPlayer.loop);
+            audioElement.loop = !audioElement.loop;
+            loopButton.classList.toggle('active', audioElement.loop);
           });
 
-          const audioContext = new AudioContext();
-          // const audioPlayer = document.getElementById('audio-player');
-          const delayButton = document.getElementById('delay-button');
 
+          // Delay
+          const delayButton = document.getElementById('delay-button');
           delayButton.addEventListener('click', () => {
             audioContext.resume().then(() => {
-              const source = audioContext.createMediaElementSource(audioPlayer);
+              // const source = audioContext.createMediaElementSource(audioElement);
 
               const delayNode = audioContext.createDelay();
-              delayNode.delayTime.value = 0.5; // set delay time to 0.5 seconds
+              delayNode.delayTime.value = 0.1; // set delay time to 0.5 seconds
 
-              source.connect(delayNode);
-              delayNode.connect(audioContext.destination);
+              // source.connect(delayNode);
+              track.connect(delayNode).connect(audioContext.destination);
 
-              audioPlayer.play();
+              // audioElement.play();
 
-              delayButton.disabled = true;
-              audioPlayer.addEventListener('ended', () => {
-                delayNode.disconnect();
-                delayButton.disabled = false;
-              });
+              // delayButton.disabled = true;
+              // audioElement.addEventListener('ended', () => {
+              //   delayNode.disconnect();
+              //   delayButton.disabled = false;
+              // });
             });
           });
 
-          const distortionCurve = new Float32Array([0, 0.5, 0.7, 0.8, 0.9, 1]);
-
-          // Add an event listener to the distortion button
+          // Distortion
+          const distortionButton = document.getElementById('distortion-button');
+          const distortionCurve = new Float32Array([0, 0.5, 1]);
           distortionButton.addEventListener('click', () => {
             // Create a media element source node for the audio player
             audioContext.resume().then(() => {
-              const source = audioContext.createMediaElementSource(audioPlayer);
+              // const source = audioContext.createMediaElementSource(audioElement);
 
               // Create a wave shaper node for the distortion effect
               const waveShaperNode = audioContext.createWaveShaper();
               waveShaperNode.curve = distortionCurve;
 
               // Connect the nodes to the audio context
-              source.connect(waveShaperNode).connect(audioContext.destination);
+              track.connect(waveShaperNode).connect(audioContext.destination);
 
               // Play the audio
-              audioPlayer.play();
+              // audioElement.play();
             });
           });
         </script>
       </li>
-    <% end %>
+    <%
+      # end
+    %>
   </ul>
 
 
