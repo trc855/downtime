@@ -1,14 +1,26 @@
-<p><%= sound.title%></p>
-<% if sound.audio.audio? %>
-  <%= audio_tag url_for(sound.audio), class:"audio", controls: true %>
-<% end %>
-<%= simple_form_for @playlist_sound do |f| %>
-  <%= f.association :playlist, collection: @playlists %>
-  <div class="d-none">
-    <%= f.association :sound, selected: sound.id %>
-  </div>
-  <%= f.submit "Add to playlist" %>
-<% end %>
-<% if current_user == sound.user %>
-  <%= link_to "delete", sound_path(sound), data: { "turbo-method": :delete } %>
-<% end %>
+<div class="sound-popover">
+  <p><%= sound.title%></p>
+  <% if sound.audio.audio? %>
+    <%= audio_tag url_for(sound.audio), class:"audio", controls: true %>
+  <% end %>
+
+  <%= simple_form_for @playlist_sound do |f| %>
+    <div class="d-flex flex-row justify-content-start align-items-start mt-2">
+      <div class="me-2">
+        <%= f.association :playlist, collection: @playlists,
+                prompt: "Add to playlist",
+                label: false%>
+      </div>
+      <div class="d-none">
+        <%= f.association :sound, selected: sound.id %>
+      </div>
+      <div class="mb-3">
+        <%= f.submit "Add", class: "submit" %>
+      </div>
+    </div>
+  <% end %>
+
+  <% if current_user == sound.user %>
+    <%= link_to "Delete this sound", sound_path(sound), data: { "turbo-method": :delete } %>
+  <% end %>
+</div>

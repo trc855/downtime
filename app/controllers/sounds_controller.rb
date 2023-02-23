@@ -24,6 +24,8 @@ class SoundsController < ApplicationController
     @sound.user = current_user
     @sound.audio.attach(params[:sound][:audio])
 
+    @sound.location = request.location.address if @sound.location.empty?
+
     if @sound.save
       redirect_to sounds_path, notice: "Sound added"
     else
@@ -33,10 +35,14 @@ class SoundsController < ApplicationController
 
   def destroy
     if @sound.destroy
-      redirect_to sounds_path, notice: "Sound deleted"
+      redirect_to request.original_url, notice: "Sound deleted"
     else
-      redirect_to sounds_path, notice: "Sound not deleted"
+      redirect_to request.original_url, notice: "Sound not deleted"
     end
+  end
+
+  def user_sounds
+    @sounds = current_user.sounds
   end
 
   private

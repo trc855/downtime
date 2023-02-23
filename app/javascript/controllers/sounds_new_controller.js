@@ -25,10 +25,12 @@ export default class extends Controller {
           event.preventDefault
           if (recording) {
             mediaRecorder.stop()
-            record.style.color = ""
+            record.style.color = "black"
+            record.innerText = "Record"
           } else {
             mediaRecorder.start()
-            record.style.color = "red"
+            record.style.color = "white"
+            record.innerText = "Recording"
           }
           recording = !recording
         }
