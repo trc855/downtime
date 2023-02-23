@@ -1,7 +1,7 @@
-<div class="container col-default-12 col-sm-10 col-md-6 col-lg-6 col-xl-5 col-xxl-5" data-controller="sounds-new">
+<div class="container sound-form-container col-default-12 col-sm-10 col-md-6 col-lg-6 col-xl-5 col-xxl-5" data-controller="sounds-new">
   <%= form_with model: sound do |f| %>
-    <%= f.label :title, class: "form-label" %>
-    <%= f.text_field :title, class: "form-control", placeholder: "Name your sound", style: "background-color: white;" %>
+    <%= f.label :title, class: "form-label mt-3" %>
+    <%= f.text_field :title, class: "form-control border-dark mb-3", placeholder: "Name your sound", style: "background-color: white;" %>
     <div class="location-input" data-controller="location">
 
       <%= f.label :location, class: "form-label" %>
@@ -20,15 +20,15 @@
         </label>
       </div>
 
-      <%= f.text_field :location, class: "form-control d-none", data: { target: "location.input"}, placeholder: "Enter an address...", style: "background-color: white;" %>
+      <%= f.text_field :location, class: "form-control border-dark d-none mt-2", data: { target: "location.input"}, placeholder: "Enter an address...", style: "background-color: white;" %>
     </div>
-    <%= f.label :audio, class: "form-label" %>
-    <div class="audio_upload input-group mb-3">
-      <div class="btn btn-dark border rounded-5" id='audio-record-button'>
+    <%= f.label :audio, class: "form-label mt-3" %>
+    <div class="audio_upload input-group">
+      <div class="btn btn-dark rounded-5 me-1" id='audio-record-button'>
         <i class="fa-solid fa-microphone"></i>
       </div>
-      <%= f.file_field :audio, direct_upload: true, class: "form-control", style: "background-color: white;" %>
+      <%= f.file_field :audio, direct_upload: true, class: "form-control border-dark", style: "background-color: white;" %>
     </div>
-    <%= f.submit class: "btn btn-light border" %>
+    <%= f.submit class: "btn btn-outline-dark my-4" %>
   <% end %>
 </div>
