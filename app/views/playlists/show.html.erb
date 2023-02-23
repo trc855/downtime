@@ -116,8 +116,7 @@
 
               waveShaperNode.curve = distortionCurve;
               // Connect waveshaper node twice for gritty distortion
-              track.connect(waveShaperNode).connect(waveShaperNode).connect(audioContext.destination);
-              activeNodes.push(waveShaperNode)
+              track.connect(waveShaperNode).connect(audioContext.destination);
               activeNodes.push(waveShaperNode)
             });
           });
