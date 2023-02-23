@@ -65,9 +65,9 @@
               this.dataset.playing = 'false';
             }
 
+            // Button handling
             let state = this.getAttribute('aria-checked') === "true" ? true : false;
             this.setAttribute( 'aria-checked', state ? "false" : "true" );
-
           }, false);
 
           // if track ends
@@ -96,7 +96,7 @@
               // const source = audioContext.createMediaElementSource(audioElement);
 
               const delayNode = audioContext.createDelay();
-              delayNode.delayTime.value = 0.1; // set delay time to 0.5 seconds
+              delayNode.delayTime.value = 0.1; // set delay time to 0.1 seconds
 
               // source.connect(delayNode);
               track.connect(delayNode).connect(audioContext.destination);
@@ -124,7 +124,7 @@
               waveShaperNode.curve = distortionCurve;
 
               // Connect the nodes to the audio context
-              track.connect(waveShaperNode).connect(audioContext.destination);
+              track.connect(waveShaperNode).connect(waveShaperNode).connect(audioContext.destination);
 
               // Play the audio
               // audioElement.play();
