@@ -44,6 +44,8 @@
           const audioElement = document.getElementById('audio-player');
           let audioContext = new AudioContext();
 
+          let activeNodes = [];
+
           let track = audioContext.createMediaElementSource(audioElement);
 
           const playButton = document.getElementById('play-button');
@@ -99,7 +101,8 @@
 
               track.connect(delayNode)
               delayNode.connect(audioContext.destination);
-              this.dataset.active = "true";
+              activeNodes.push(delayNode)
+              delayButton.dataset.active = "true";
             });
           });
 
@@ -114,6 +117,8 @@
               waveShaperNode.curve = distortionCurve;
               // Connect waveshaper node twice for gritty distortion
               track.connect(waveShaperNode).connect(waveShaperNode).connect(audioContext.destination);
+              activeNodes.push(waveShaperNode)
+              activeNodes.push(waveShaperNode)
             });
           });
         </script>
