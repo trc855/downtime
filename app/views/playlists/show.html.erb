@@ -9,7 +9,7 @@
     <% @playlist_sounds.each do |playlist_sound| %>
       <% sound = playlist_sound.sound %>
       <li class='playlist-item'>
-        <%= sound.title %>
+        <p><%= link_to sound.title, sound_path(sound) %></p>
         <% if sound.audio.audio? %>
         <div class="audio-tag" data-playlist-target="audiotag">
           <%= audio_tag url_for(sound.audio),
