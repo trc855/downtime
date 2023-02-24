@@ -1,5 +1,5 @@
 class SoundsController < ApplicationController
-  before_action :set_sound, only: [:destroy]
+  before_action :set_sound, only: %i[show destroy]
 
   def index
     @sounds = Sound.all
@@ -13,6 +13,9 @@ class SoundsController < ApplicationController
         sound_window_html: render_to_string(partial: "sound_window", locals: { sound: sound })
       }
     end
+  end
+
+  def show
   end
 
   def new
@@ -35,7 +38,7 @@ class SoundsController < ApplicationController
 
   def destroy
     if @sound.destroy
-      redirect_to request.original_url, notice: "Sound deleted"
+      redirect_to request.original_url =~ /sounds\/\d/ ? root_path : request.original_url, notice: "Sound deleted"
     else
       redirect_to request.original_url, notice: "Sound not deleted"
     end

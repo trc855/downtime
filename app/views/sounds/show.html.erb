@@ -1,0 +1,107 @@
+<div class="container">
+  <h1><%= @sound.title %></h1>
+  <% if @sound.audio.audio? %>
+  <%# NOTE: decide whether to go back to stimulus %>
+  <%# <div class="audio-tag" data-playlist-target="audiotag"> %>
+    <%= audio_tag url_for(@sound.audio),
+              class:"audio",
+              id:"audio-player",
+              controls: false %>
+  <%# </div> %>
+  <% end %>
+
+  <%# SOUND CONTROLS %>
+  <div class="controls">
+    <button id="play-button" data-playing="false">Play/Pause</button>
+    <%# <button id="reset-button">Reset</button> %>
+    <button id="loop-button">Loop</button>
+    <button id="delay-button" data-active="false">Add Delay</button>
+    <button id="distortion-button">Add Distortion</button>
+  </div>
+
+  <% if current_user == @sound.user %>
+    <%= link_to "Delete this sound", sound_path(@sound), data: { "turbo-method": :delete } %>
+  <% end %>
+</div>
+
+
+<%# SOUND CONTROLS JAVASCRIPT %>
+<script>
+  const audioElement = document.getElementById('audio-player');
+  let audioContext = new AudioContext();
+
+  let activeNodes = [];
+
+  let track = audioContext.createMediaElementSource(audioElement);
+
+  const playButton = document.getElementById('play-button');
+  // play pause audio
+  playButton.addEventListener('click', function() {
+    track.connect(audioContext.destination);
+    // check if context is in suspended state (autoplay policy)
+    if (audioContext.state === 'suspended') {
+      audioContext.resume();
+    }
+
+    if (this.dataset.playing === 'false') {
+      audioElement.play();
+      this.dataset.playing = 'true';
+    } else if (this.dataset.playing === 'true') {
+      audioElement.pause();
+      this.dataset.playing = 'false';
+    }
+
+    let state = this.getAttribute('aria-checked') === "true" ? true : false;
+    this.setAttribute( 'aria-checked', state ? "false" : "true" );
+  }, false);
+
+  // if track ends
+  audioElement.addEventListener('ended', () => {
+    playButton.dataset.playing = 'false';
+    playButton.setAttribute( "aria-checked", "false" );
+  }, false);
+
+  // TODO: implement a reset button to remove all effects on the sound
+  // const resetButton = document.getElementById('reset-button')
+  // resetButton.addEventListener('click', () => {
+    // Implement total refresh heres
+  // });
+
+  // Loop
+  const loopButton = document.getElementById('loop-button');
+  loopButton.addEventListener('click', () => {
+    audioElement.loop = !audioElement.loop;
+    loopButton.classList.toggle('active', audioElement.loop);
+  });
+
+
+  // Delay
+  const delayButton = document.getElementById('delay-button');
+  delayButton.addEventListener('click', () => {
+    audioContext.resume().then(() => {
+
+      const delayNode = audioContext.createDelay();
+      delayNode.delayTime.value = 0.1; // set delay time to 0.1 seconds
+
+      track.connect(delayNode)
+      delayNode.connect(audioContext.destination);
+      activeNodes.push(delayNode)
+      delayButton.dataset.active = "true";
+    });
+  });
+
+  // Distortion
+  const distortionButton = document.getElementById('distortion-button');
+  const distortionCurve = new Float32Array([0, 0.5, 1]);
+  distortionButton.addEventListener('click', () => {
+    audioContext.resume().then(() => {
+      // Create a wave shaper node for the distortion effect
+      const waveShaperNode = audioContext.createWaveShaper();
+
+      waveShaperNode.curve = distortionCurve;
+      // NTS: Connect waveshaper node twice for gritty distortion
+      track.connect(waveShaperNode).connect(audioContext.destination);
+      activeNodes.push(waveShaperNode)
+    });
+  });
+</script>
