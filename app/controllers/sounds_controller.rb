@@ -38,7 +38,7 @@ class SoundsController < ApplicationController
 
   def destroy
     if @sound.destroy
-      redirect_to request.original_url, notice: "Sound deleted"
+      redirect_to request.original_url =~ /sounds\/\d/ ? root_path : request.original_url, notice: "Sound deleted"
     else
       redirect_to request.original_url, notice: "Sound not deleted"
     end
