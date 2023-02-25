@@ -15,6 +15,7 @@
     <button id="play-button" data-playing="false">Play/Pause</button>
     <%# <button id="reset-button">Reset</button> %>
     <button id="loop-button">Loop</button>
+    <input type="range" id="volume" min="0" max="2" value="1" step="0.01" />
     <button id="delay-button" data-active="false">Add Delay</button>
     <button id="distortion-button">Add Distortion</button>
   </div>
@@ -34,8 +35,8 @@
 
   let track = audioContext.createMediaElementSource(audioElement);
 
-  const playButton = document.getElementById('play-button');
   // play pause audio
+  const playButton = document.getElementById('play-button');
   playButton.addEventListener('click', function() {
     track.connect(audioContext.destination);
     // check if context is in suspended state (autoplay policy)
@@ -73,6 +74,19 @@
     audioElement.loop = !audioElement.loop;
     loopButton.classList.toggle('active', audioElement.loop);
   });
+
+  // Volume
+  const volumeControl = document.getElementById('volume');
+  const gainNode = audioContext.createGain();
+  track.connect(gainNode).connect(audioContext.destination);
+  volumeControl.addEventListener("input", () => {
+    audioContext.resume().then(() => {
+      gainNode.gain.value = volumeControl.value;
+    });
+    },
+    false
+  );
+
 
 
   // Delay
