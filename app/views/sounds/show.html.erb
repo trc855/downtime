@@ -38,7 +38,6 @@
   // play pause audio
   const playButton = document.getElementById('play-button');
   playButton.addEventListener('click', function() {
-    // track.connect(audioContext.destination);
     // check if context is in suspended state (autoplay policy)
     if (audioContext.state === 'suspended') {
       audioContext.resume();
@@ -87,8 +86,6 @@
     false
   );
 
-
-
   // Delay
   const delayButton = document.getElementById('delay-button');
   delayButton.addEventListener('click', () => {
@@ -97,7 +94,7 @@
       const delayNode = audioContext.createDelay();
       delayNode.delayTime.value = 0.1; // set delay time to 0.1 seconds
 
-      track.connect(delayNode)
+      track.connect(gainNode).connect(delayNode)
       delayNode.connect(audioContext.destination);
       activeNodes.push(delayNode)
       delayButton.dataset.active = "true";
@@ -111,10 +108,9 @@
     audioContext.resume().then(() => {
       // Create a wave shaper node for the distortion effect
       const waveShaperNode = audioContext.createWaveShaper();
-
       waveShaperNode.curve = distortionCurve;
-      // NTS: Connect waveshaper node twice for gritty distortion
-      track.connect(waveShaperNode).connect(audioContext.destination);
+
+      track.connect(gainNode).connect(waveShaperNode).connect(audioContext.destination);
       activeNodes.push(waveShaperNode)
     });
   });
