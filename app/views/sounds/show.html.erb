@@ -38,7 +38,7 @@
   // play pause audio
   const playButton = document.getElementById('play-button');
   playButton.addEventListener('click', function() {
-    track.connect(audioContext.destination);
+    // track.connect(audioContext.destination);
     // check if context is in suspended state (autoplay policy)
     if (audioContext.state === 'suspended') {
       audioContext.resume();
