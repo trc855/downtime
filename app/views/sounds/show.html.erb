@@ -31,8 +31,6 @@
   const audioElement = document.getElementById('audio-player');
   let audioContext = new AudioContext();
 
-  let activeNodes = [];
-
   let track = audioContext.createMediaElementSource(audioElement);
 
   // play pause audio
@@ -96,7 +94,6 @@
 
       track.connect(gainNode).connect(delayNode)
       delayNode.connect(audioContext.destination);
-      activeNodes.push(delayNode)
       delayButton.dataset.active = "true";
     });
   });
@@ -111,7 +108,6 @@
       waveShaperNode.curve = distortionCurve;
 
       track.connect(gainNode).connect(waveShaperNode).connect(audioContext.destination);
-      activeNodes.push(waveShaperNode)
     });
   });
 </script>
