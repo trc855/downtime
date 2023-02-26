@@ -6,8 +6,7 @@
     <%= audio_tag url_for(@sound.audio),
               class:"audio",
               id:"audio-player",
-              controls: false,
-              data: { id: @sound.id } %>
+              controls: false %>
   <%# </div> %>
   <% end %>
 
@@ -30,9 +29,9 @@
 <%# SOUND CONTROLS JAVASCRIPT %>
 <script>
   function pageAudioControls() {
-    let audioElement = document.getElementById('audio-player');
-    let audioContext = new AudioContext();
-    let track = audioContext.createMediaElementSource(audioElement);
+    const audioElement = document.getElementById('audio-player');
+    const audioContext = new AudioContext();
+    const track = audioContext.createMediaElementSource(audioElement);
 
     // play pause audio
     const playButton = document.getElementById('play-button');
