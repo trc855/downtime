@@ -114,25 +114,23 @@
     // Distortion
     const distortionButton = document.getElementById('distortion-button');
     const distortionCurve = new Float32Array([0, 0.5, 1]);
-    let waveShaperNode;
+    let waveShaperNode = audioContext.createWaveShaper();
     distortionButton.addEventListener('click', () => {
       audioContext.resume().then(() => {
         // Create a wave shaper node for the distortion effect
-        waveShaperNode = audioContext.createWaveShaper();
         waveShaperNode.curve = distortionCurve;
-
+        // adding twice for extra grit
         track.connect(gainNode).connect(waveShaperNode).connect(waveShaperNode).connect(audioContext.destination);
         distortionButton.dataset.active = "true"
-        console.log(track);
       });
     });
     const removeDistortion = document.getElementById('distortion-remove');
     removeDistortion.addEventListener('click', () => {
       if (distortionButton.dataset.active === "true") {
+        // disconnect twice as was added twice
         waveShaperNode.disconnect();
         waveShaperNode.disconnect();
         delayButton.dataset.active = 'false'
-        console.log(track);
       }
     });
   }
