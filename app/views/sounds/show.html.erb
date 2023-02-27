@@ -21,7 +21,8 @@
     <label for="delay-range">Delay Amount</label>
     <input type="range" id="delay-range" min="0" max="1" value="0.1" step="0.1" />
     <button id="delay-remove">Remove Delay</button>
-    <button id="distortion-button">Add Distortion</button>
+    <button id="distortion-button" data-active="false">Add Distortion</button>
+    <button id="distortion-remove">Remove Distortion</button>
   </div>
 
   <% if current_user == @sound.user %>
@@ -113,14 +114,26 @@
     // Distortion
     const distortionButton = document.getElementById('distortion-button');
     const distortionCurve = new Float32Array([0, 0.5, 1]);
+    let waveShaperNode;
     distortionButton.addEventListener('click', () => {
       audioContext.resume().then(() => {
         // Create a wave shaper node for the distortion effect
-        const waveShaperNode = audioContext.createWaveShaper();
+        waveShaperNode = audioContext.createWaveShaper();
         waveShaperNode.curve = distortionCurve;
 
-        track.connect(gainNode).connect(waveShaperNode).connect(audioContext.destination);
+        track.connect(gainNode).connect(waveShaperNode).connect(waveShaperNode).connect(audioContext.destination);
+        distortionButton.dataset.active = "true"
+        console.log(track);
       });
+    });
+    const removeDistortion = document.getElementById('distortion-remove');
+    removeDistortion.addEventListener('click', () => {
+      if (distortionButton.dataset.active === "true") {
+        waveShaperNode.disconnect();
+        waveShaperNode.disconnect();
+        delayButton.dataset.active = 'false'
+        console.log(track);
+      }
     });
   }
   pageAudioControls()
