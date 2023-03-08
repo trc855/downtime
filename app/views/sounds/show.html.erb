@@ -1,0 +1,144 @@
+<div class="container">
+  <h1><%= @sound.title %></h1>
+  <% if @sound.audio.audio? %>
+  <%# NOTE: decide whether to go back to stimulus %>
+  <%# <div class="audio-tag" data-playlist-target="audiotag"> %>
+    <%= audio_tag url_for(@sound.audio),
+              class:"audio",
+              id:"audio-player",
+              controls: false %>
+  <%# </div> %>
+  <% end %>
+
+  <%# SOUND CONTROLS %>
+  <div class="controls d-flex flex-column">
+    <button id="play-button" data-playing="false">Play/Pause</button>
+    <button id="reset-button">Reset</button>
+    <button id="loop-button">Loop</button>
+    <label for="volume">Volume</label>
+    <input type="range" id="volume" min="0" max="2" value="1" step="0.01" />
+    <button id="delay-button" data-active="false">Add Delay</button>
+    <label for="delay-range">Delay Amount</label>
+    <input type="range" id="delay-range" min="0" max="1" value="0.1" step="0.1" />
+    <button id="delay-remove">Remove Delay</button>
+    <button id="distortion-button" data-active="false">Add Distortion</button>
+    <button id="distortion-remove">Remove Distortion</button>
+  </div>
+
+  <% if current_user == @sound.user %>
+    <%= link_to "Delete this sound", sound_path(@sound), data: { "turbo-method": :delete } %>
+  <% end %>
+</div>
+
+
+<%# SOUND CONTROLS JAVASCRIPT %>
+<script>
+  function pageAudioControls() {
+    const audioElement = document.getElementById('audio-player');
+    const audioContext = new AudioContext();
+    const track = audioContext.createMediaElementSource(audioElement);
+
+    const effectNodes = [];
+
+    // play pause audio
+    const playButton = document.getElementById('play-button');
+    playButton.addEventListener('click', function() {
+      // check if context is in suspended state (autoplay policy)
+      if (audioContext.state === 'suspended') {
+        audioContext.resume();
+      }
+
+      if (this.dataset.playing === 'false') {
+        audioElement.play();
+        this.dataset.playing = 'true';
+      } else if (this.dataset.playing === 'true') {
+        audioElement.pause();
+        this.dataset.playing = 'false';
+      }
+
+      let state = this.getAttribute('aria-checked') === "true" ? true : false;
+      this.setAttribute( 'aria-checked', state ? "false" : "true" );
+    }, false);
+
+    // if track ends
+    audioElement.addEventListener('ended', () => {
+      playButton.dataset.playing = 'false';
+      playButton.setAttribute( "aria-checked", "false" );
+    }, false);
+
+    // Reset
+    const resetButton = document.getElementById('reset-button')
+    resetButton.addEventListener('click', () => {
+      effectNodes.forEach(node => {
+        node.disconnect();
+      });
+    });
+
+    // Loop
+    const loopButton = document.getElementById('loop-button');
+    loopButton.addEventListener('click', () => {
+      audioElement.loop = !audioElement.loop;
+      loopButton.classList.toggle('active', audioElement.loop);
+    });
+
+    // Volume
+    const volumeControl = document.getElementById('volume');
+    const gainNode = audioContext.createGain();
+    track.connect(gainNode).connect(audioContext.destination);
+    volumeControl.addEventListener("input", () => {
+      audioContext.resume().then(() => {
+        gainNode.gain.value = volumeControl.value;
+      });
+      },
+      false
+    );
+
+    // Delay
+    const delayButton = document.getElementById('delay-button');
+    const delayRange = document.getElementById('delay-range')
+    const delayNode = audioContext.createDelay();
+    delayButton.addEventListener('click', () => {
+      audioContext.resume().then(() => {
+
+        delayNode.delayTime.value = delayRange.value;
+
+        track.connect(gainNode).connect(delayNode)
+        delayNode.connect(audioContext.destination);
+        effectNodes.push(delayNode)
+        delayButton.dataset.active = "true";
+      });
+    });
+    const removeDelay = document.getElementById('delay-remove');
+    removeDelay.addEventListener('click', () => {
+      if (delayButton.dataset.active === "true") {
+        delayNode.disconnect();
+        delayButton.dataset.active = 'false'
+      }
+    });
+
+    // Distortion
+    const distortionButton = document.getElementById('distortion-button');
+    const distortionCurve = new Float32Array([0, 0.5, 1]);
+    let waveShaperNode = audioContext.createWaveShaper();
+    distortionButton.addEventListener('click', () => {
+      audioContext.resume().then(() => {
+        // Create a wave shaper node for the distortion effect
+        waveShaperNode.curve = distortionCurve;
+        // adding twice for extra grit
+        track.connect(gainNode).connect(waveShaperNode).connect(waveShaperNode).connect(audioContext.destination);
+        effectNodes.push(waveShaperNode);
+        distortionButton.dataset.active = "true"
+      });
+    });
+    const removeDistortion = document.getElementById('distortion-remove');
+    removeDistortion.addEventListener('click', () => {
+      if (distortionButton.dataset.active === "true") {
+        // disconnect twice as was added twice
+        waveShaperNode.disconnect();
+        waveShaperNode.disconnect();
+        delayButton.dataset.active = 'false'
+      }
+    });
+  }
+  pageAudioControls()
+</script>

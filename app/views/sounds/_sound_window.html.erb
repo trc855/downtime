@@ -1,5 +1,5 @@
 <div class="sound-popover">
-  <p><%= sound.title%></p>
+  <%= link_to sound.title, sound_path(sound) %>
   <% if sound.audio.audio? %>
     <%= audio_tag url_for(sound.audio), class:"audio", controls: true %>
   <% end %>
