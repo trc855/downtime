@@ -1,9 +1,11 @@
-
-
-<div class="container"
- <%# data-controller="playlist" %>
- >
+<div class="container">
   <h1><%= @playlist.title %></h1>
+
+  <div class="playlist-controls">
+    <button id="autoplay">Play All</button>
+    <button id="repeat">Repeat</button>
+    <button id="shuffle">Shuffle (Infinitely)</button>
+  </div>
 
   <ul class='playlist-list'>
     <% @playlist_sounds.each do |playlist_sound| %>
@@ -25,6 +27,52 @@
     <% end %>
   </ul>
 
+  <script>
+    function playlistControls() {
+      let repeat = false;
+      let shuffle = false;
+
+      const repeatToggle = document.getElementById("repeat")
+      repeatToggle.addEventListener('click', () => {
+        repeat = !repeat
+      });
+
+      const shuffleToggle = document.getElementById("shuffle")
+      shuffleToggle.addEventListener('click', () => {
+        shuffle = !shuffle
+        console.log(shuffle);
+      });
+
+      const sounds = document.querySelectorAll('audio');
+      function autoPlay() {
+        sounds.forEach((sound, i) => {
+          sound.onended = function () {
+            if (!shuffle) {
+              if (sounds[i+1]) {
+                sounds[i+1].play();
+              } else if (repeat) {
+                sounds[0].play();
+              }
+            } else {
+              const index = Math.floor(Math.random() * sounds.length);
+              // TODO: prevent track repeats by implementing 'true shuffle'.
+              // ie. shuffle through each track once per play through.
+              sounds[index].play();
+            }
+          }
+        });
+      };
+
+      const autoplayButton = document.getElementById("autoplay");
+      autoplayButton.addEventListener('click', () => {
+        autoPlay()
+        if (sounds[0]) {
+          sounds[0].play();
+        }
+      });
+    }
+    playlistControls();
+  </script>
 
   <%= link_to "delete playlist", playlist_path(@playlist), data: { "turbo-method": :delete } %>
 </div>
