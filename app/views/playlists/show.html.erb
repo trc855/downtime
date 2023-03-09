@@ -3,6 +3,7 @@
 
   <div class="playlist-controls">
     <button id="autoplay">Play All</button>
+    <button id="repeat">Repeat</button>
   </div>
 
   <ul class='playlist-list'>
@@ -27,21 +28,33 @@
 
   <script>
     function playlistControls() {
+      let repeat = false;
+
+      const repeatToggle = document.getElementById("repeat")
+      repeatToggle.addEventListener('click', () => {
+        repeat = !repeat
+        console.log(repeat);
+      });
+
       const sounds = document.querySelectorAll('audio');
       function autoPlay() {
-        sounds.forEach((sound, i)=> {
+        sounds.forEach((sound, i) => {
           sound.onended = function () {
             if (sounds[i+1]) {
               sounds[i+1].play();
+            } else if (repeat) {
+              sounds[0].play();
             }
           }
         });
       };
 
       const autoplayButton = document.getElementById("autoplay");
-      autoplayButton.addEventListener('click', function () {
+      autoplayButton.addEventListener('click', () => {
         autoPlay()
-        if (sounds[0]) { sounds[0].play(); }
+        if (sounds[0]) {
+          sounds[0].play();
+        }
       });
     }
     playlistControls();
