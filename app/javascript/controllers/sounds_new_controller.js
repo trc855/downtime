@@ -25,12 +25,16 @@ export default class extends Controller {
           event.preventDefault
           if (recording) {
             mediaRecorder.stop()
-            record.style.color = "black"
-            record.innerText = "Record"
+            record.classList.remove("btn-danger")
+            record.classList.add("btn-dark")
+            record.style.padding = "6px 12px"
+            record.innerHTML = "<i class='fa-solid fa-microphone'></i>"
           } else {
             mediaRecorder.start()
-            record.style.color = "white"
-            record.innerText = "Recording"
+            record.classList.remove("btn-dark")
+            record.classList.add("btn-danger")
+            record.style.padding = "6px 10.5px"
+            record.innerHTML = "<div class='boxContainer'><div class='box box1'></div><div class='box box2'></div><div class='box box3'></div><div class='box box4'></div><div class='box box5'></div></div>"
           }
           recording = !recording
         }
