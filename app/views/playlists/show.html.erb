@@ -4,7 +4,7 @@
   <div class="playlist-controls">
     <button id="autoplay">Play All</button>
     <button id="repeat">Repeat</button>
-    <button id="shuffle">Shuffle (Infinitely)</button>
+    <button id="shuffle">Shuffle and Repeat</button>
   </div>
 
   <ul class='playlist-list'>
@@ -54,9 +54,13 @@
                 sounds[0].play();
               }
             } else {
-              const index = Math.floor(Math.random() * sounds.length);
-              // TODO: prevent track repeats by implementing 'true shuffle'.
-              // ie. shuffle through each track once per play through.
+              let index = Math.floor(Math.random() * sounds.length);
+              // ensures no track plays twice in a row
+              if (sounds.length > 1) {
+                while (i === index) {
+                  index = Math.floor(Math.random() * sounds.length);
+                }
+              }
               sounds[index].play();
             }
           }
