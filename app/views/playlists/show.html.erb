@@ -2,9 +2,9 @@
   <h1><%= @playlist.title %></h1>
 
   <div class="playlist-controls">
-    <button id="autoplay">Play All</button>
-    <button id="repeat">Repeat</button>
-    <button id="shuffle">Shuffle and Repeat</button>
+    <div class="btn btn-primary" id="autoplay">Play All</div>
+    <div class="btn btn-success" id="repeat">Repeat</div>
+    <div class="btn btn-success" id="shuffle">Shuffle and Repeat</div>
   </div>
 
   <ul class='playlist-list'>
@@ -35,12 +35,13 @@
       const repeatToggle = document.getElementById("repeat")
       repeatToggle.addEventListener('click', () => {
         repeat = !repeat
+        repeatToggle.classList.toggle("active")
       });
 
       const shuffleToggle = document.getElementById("shuffle")
       shuffleToggle.addEventListener('click', () => {
         shuffle = !shuffle
-        console.log(shuffle);
+        shuffleToggle.classList.toggle("active")
       });
 
       const sounds = document.querySelectorAll('audio');
