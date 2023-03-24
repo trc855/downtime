@@ -27,7 +27,7 @@ class SoundsController < ApplicationController
     @sound.user = current_user
     @sound.audio.attach(params[:sound][:audio])
 
-    @sound.location = request.location.address if @sound.location.empty?
+    # @sound.location = request.location.address if @sound.location.empty?
 
     if @sound.save
       redirect_to sounds_path, notice: "Sound added"
@@ -51,7 +51,7 @@ class SoundsController < ApplicationController
   private
 
   def sound_params
-    params.require(:sound).permit(:title, :location, :audio)
+    params.require(:sound).permit(:title, :location, :latitude, :longitude, :audio)
   end
 
   def set_sound
