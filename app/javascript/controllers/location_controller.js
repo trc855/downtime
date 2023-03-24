@@ -7,11 +7,10 @@ const options = {
 };
 
 export default class extends Controller {
-  static targets = ["input", "lat", "long", "coords"];
+  static targets = ["input", "lat", "long"];
 
   connect() {
     // console.log("Hello from location controller")
-    // console.log(this.coordsTarget);
   }
 
   showLocInput() {
@@ -25,11 +24,6 @@ export default class extends Controller {
 
   success(pos) {
     const crd = pos.coords;
-    // console.log("Your current position is:");
-    // console.log(`Latitude : ${crd.latitude}`);
-    // console.log(`Longitude: ${crd.longitude}`);
-    // console.log(`More or less ${crd.accuracy} meters.`);
-    // console.log(this.coordsTarget);
     this.setCoords(crd)
   }
 
@@ -38,9 +32,7 @@ export default class extends Controller {
   }
 
   setCoords(crd) {
-    console.log(crd);
     this.latTarget.value = crd.latitude
     this.longTarget.value = crd.longitude
-    console.log(this.coordsTarget);
   }
 }
