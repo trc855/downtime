@@ -7,20 +7,25 @@
       <%= f.label :location, class: "form-label" %>
 
       <div class="form-check">
-        <input data-action="change->location#hideLocInput" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" checked>
+        <input data-action="change->location#hideLocInput" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
         <label class="form-check-label" for="flexRadioDefault1">
           Use My Location
         </label>
       </div>
 
+      <div class="d-none">
+        <%= f.text_field :latitude, data: { target: "location.lat"} %>
+        <%= f.text_field :longitude, data: { target: "location.long"} %>
+      </div>
+
       <div class="form-check">
-        <input data-action="change->location#showLocInput" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
+        <input data-action="change->location#showLocInput" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
         <label class="form-check-label" for="flexRadioDefault2">
           Enter A Location Manually
         </label>
       </div>
 
-      <%= f.text_field :location, class: "form-control border-dark d-none mt-2", data: { target: "location.input"}, placeholder: "Enter an address...", style: "background-color: white;" %>
+      <%= f.text_field :location, class: "form-control border-dark mt-2", data: { target: "location.input"}, placeholder: "Enter an address...", style: "background-color: white;" %>
     </div>
     <%= f.label :audio, class: "form-label mt-3" %>
     <div class="audio_upload input-group">
