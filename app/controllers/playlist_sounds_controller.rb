@@ -7,6 +7,8 @@ class PlaylistSoundsController < ApplicationController
   end
 
   def destroy
+    return unless @playlist_sound.user == current_user
+
     @playlist_sound = PlaylistSound.find(params[:id])
     sound = @playlist_sound.sound.title
     playlist = @playlist_sound.playlist
