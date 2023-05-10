@@ -24,6 +24,8 @@ class PlaylistsController < ApplicationController
   end
 
   def destroy
+    return unless @playlist.user == current_user
+
     if @playlist.destroy
       redirect_to playlists_path, notice: "Playlist deleted"
     else
