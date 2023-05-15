@@ -20,12 +20,16 @@
                     controls: true %>
         </div>
         <% end %>
-        <% if current_user == sound.user %>
+        <% if current_user == @playlist.user %>
           <%= link_to "remove", playlist_sound_path(playlist_sound), data: { "turbo-method": :delete } %>
         <% end %>
       </li>
     <% end %>
   </ul>
+
+  <% if current_user == @playlist.user %>
+    <%= link_to "delete playlist", playlist_path(@playlist), data: { "turbo-method": :delete } %>
+  <% end %>
 
   <script>
     function playlistControls() {
@@ -78,6 +82,4 @@
     }
     playlistControls();
   </script>
-
-  <%= link_to "delete playlist", playlist_path(@playlist), data: { "turbo-method": :delete } %>
 </div>
