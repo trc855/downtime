@@ -24,12 +24,11 @@ class PlaylistsController < ApplicationController
   end
 
   def destroy
-    return unless @playlist.user == current_user
-
-    if @playlist.destroy
-      redirect_to playlists_path, notice: "Playlist deleted"
+    if @playlist.user == current_user
+      @playlist.destroy
+      redirect_to playlists_path, notice: "Playlist deleted successfully."
     else
-      redirect_to playlists_path, notice: "Playlist could not be deleted"
+      redirect_to playlists_path, notice: "You do not have permission to delete this playlist."
     end
   end
 
