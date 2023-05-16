@@ -1,7 +1,7 @@
 require "test_helper"
 
 class PlaylistTest < ActiveSupport::TestCase
-  user = User.create(email: "test@example.com", password: "password123", password_confirmation: "password123")
+  User.create(email: "test@example.com", password: "password123", password_confirmation: "password123")
 
   test "should not save without a valid user" do
     playlist = Playlist.new(title: "test playlist")
@@ -29,7 +29,6 @@ class PlaylistTest < ActiveSupport::TestCase
     Playlist.create(user_id: 1, title: "test playlist")
 
     new_user = User.create(email: "test2@example.com", password: "password123", password_confirmation: "password123")
-
     playlist = Playlist.new(user_id: new_user.id, title: "test playlist")
 
     assert playlist.save, "could not save playlist with globally non unique title"
