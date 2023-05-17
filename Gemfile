@@ -81,5 +81,5 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem "webdrivers"
-  gem "mocha"
+  gem "rspec-mocks"
 end
