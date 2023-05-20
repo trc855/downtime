@@ -7,18 +7,18 @@ class PlaylistSoundsControllerTest < ActionController::TestCase
     @user_a = User.create(email: "user_A@example.com", password: "password123", password_confirmation: "password123")
     @user_b = User.create(email: "user_B@example.com", password: "password123", password_confirmation: "password123")
 
-    @playlist_a = Playlist.create(user_id: @user_a.id, title: "Playlist A")
+    playlist_a = Playlist.create(user_id: @user_a.id, title: "Playlist A")
 
-    @sound_a = Sound.new(user_id: @user_a.id)
-    @sound_a.audio.attach(io: File.open(Rails.root.join("test", "fixtures", "files", "test_audio.mp3")), filename: "test_audio.mp3", content_type: "audio/mp3")
-    @sound_a.save
+    sound_a = Sound.new(user_id: @user_a.id)
+    sound_a.audio.attach(io: File.open(Rails.root.join("test", "fixtures", "files", "test_audio.mp3")), filename: "test_audio.mp3", content_type: "audio/mp3")
+    sound_a.save
 
-    @sound_b = Sound.new(user_id: @user_b.id)
-    @sound_b.audio.attach(io: File.open(Rails.root.join("test", "fixtures", "files", "test_audio.mp3")), filename: "test_audio.mp3", content_type: "audio/mp3")
-    @sound_b.save
+    sound_b = Sound.new(user_id: @user_b.id)
+    sound_b.audio.attach(io: File.open(Rails.root.join("test", "fixtures", "files", "test_audio.mp3")), filename: "test_audio.mp3", content_type: "audio/mp3")
+    sound_b.save
 
-    @playlist_sound_a = PlaylistSound.create(playlist_id: @playlist_a.id, sound_id: @sound_a.id)
-    @playlist_sound_b = PlaylistSound.create(playlist_id: @playlist_a.id, sound_id: @sound_b.id)
+    @playlist_sound_a = PlaylistSound.create(playlist_id: playlist_a.id, sound_id: sound_a.id)
+    @playlist_sound_b = PlaylistSound.create(playlist_id: playlist_a.id, sound_id: sound_b.id)
   end
 
   test "user A can delete user A's playlist's playlist_sounds" do
